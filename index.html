@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A Love Letter To You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0f0f11;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 3.5rem;
+      color: #e5e5e5;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    /* Envelope Container */
+    .envelope-wrapper {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .envelope {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      background: #f7ede2;
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Envelope Top Flap */
+    .envelope .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 120px solid #ecd3bd;
+      transform-origin: top;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    /* Left & Right Pocket Folds */
+    .envelope .pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid #f2dbcb;
+      border-right: 160px solid #ebd0be;
+      border-bottom: 120px solid #ebd0be;
+      border-top: 100px solid transparent;
+      border-radius: 0 0 8px 8px;
+      z-index: 3;
+    }
+
+    /* Wax Seal Button */
+    .seal-button {
+      position: absolute;
+      top: 98px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #e05d67 40%, #c43845 100%);
+      border: 3px solid #b32a37;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.4s ease;
+    }
+
+    .seal-button::after {
+      content: '💌';
+      font-size: 1.2rem;
+    }
+
+    .envelope-wrapper:hover .seal-button {
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    /* The Letter Paper */
+    .letter {
+      position: absolute;
+      top: 10px;
+      left: 18px;
+      width: 284px;
+      height: 200px;
+      background: #fffdf9;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  height 0.6s ease,
+                  top 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      overflow: hidden;
+      color: #333;
+    }
+
+    .letter-content {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .letter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #a83232;
+      border-bottom: 1px dashed #e2c0c0;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .letter-body {
+      font-family: 'Caveat', cursive;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      color: #3c3c3c;
+    }
+
+    /* Music Player Bar Inside Letter */
+    .music-bar {
+      margin-top: 16px;
+      padding: 8px 12px;
+      background: #fdf2f2;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: #777;
+    }
+
+    .music-toggle {
+      background: #e05d67;
+      border: none;
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+
+    /* State: Opened */
+    .envelope-wrapper.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.open .seal-button {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    .envelope-wrapper.open .letter {
+      transform: translateY(-160px);
+      height: 330px;
+      z-index: 6;
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .envelope-wrapper.open .letter-content {
+      opacity: 1;
+      transition-delay: 0.4s;
+    }
+
+    .hint {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">a happy bday letter to you my bhguu</h1>
+
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    <div class="envelope">
+      <div class="flap"></div>
+      <div class="seal-button" id="sealBtn" title="Click to open"></div>
+      
+      <div class="letter" id="letter">
+        <div class="letter-content">
+          <h2 class="letter-title">Forever & Always</h2>
+          <div class="letter-body">
+            "Butterflies can't see their own wings, but everyone adores them. So when I say you're perfect in my eyes, I mean it. Even if you don't see it, I do." 
+          </div>
+          
+          <div class="music-bar">
+            <button class="music-toggle" id="audioBtn" type="button">▶</button>
+            <span id="audioStatus">Our song is playing...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pocket"></div>
+    </div>
+  </div>
+
+  <p class="hint">Click the seal to unfold the letter</p>
+
+  <!-- Background audio (replace with your audio file or MP3 URL) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="audio.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const wrapper = document.getElementById('envelopeWrapper');
+    const bgMusic = document.getElementById('bgMusic');
+    const audioBtn = document.getElementById('audioBtn');
+    const audioStatus = document.getElementById('audioStatus');
+
+    let isOpen = false;
+
+    // Toggle letter open / close
+    wrapper.addEventListener('click', (e) => {
+      // Don't trigger envelope toggle if clicking the inner play button
+      if (e.target.closest('#audioBtn')) return;
+
+      isOpen = !isOpen;
+      wrapper.classList.toggle('open', isOpen);
+
+      // Autoplay audio on first opening (browsers allow audio on user gesture)
+      if (isOpen && bgMusic.paused) {
+        bgMusic.play().then(() => {
+          audioBtn.textContent = '⏸';
+        }).catch(() => {
+          // Fallback if browser policy blocks autoplay
+          audioBtn.textContent = '▶';
+        });
+      }
+    });
+
+    // Audio Play/Pause button
+    audioBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (bgMusic.paused) {
+        bgMusic.play();
+        audioBtn.textContent = '⏸';
+      } else {
+        bgMusic.pause();
+        audioBtn.textContent = '▶';
+      }
+    });
+  </script>
+</body>
+</html>
